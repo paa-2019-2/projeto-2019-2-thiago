@@ -1,0 +1,72 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Grupo de Teoria da Computacao, Universidade de Brasilia
+%%% 
+%%% Last modification:  September 2019
+%%% Authors: Jadiel Teófilo Amorim de Oliveira
+%%%          Mauricio Ayala-Rincon
+%%% 
+%%% This file contains the specification of complexity funtions
+%%% (Theta, Omicron, Omega, etc)  and theorems concerning the
+%%% complexity of mergesort, and quick sort
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+complexity : THEORY
+BEGIN
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% DEFINITIONS OF ASYMPTOTIC CLASSES OF FAMILIES OF FUNCTIONS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%
+%% The definition of the Theta operator 
+%%%%
+
+Theta( f : [nat -> nonneg_real ]) : setof [[nat -> nonneg_real]] = 
+       { g : [nat -> nonneg_real] | EXISTS (c1, c2 : nonneg_real, n0 : nat ) :
+       	   FORALL (n : nat |  n >= n0 ) : 
+	   	  c1 * f(n) <= g(n) AND g(n) <= c2 * f(n)}
+
+%%%%
+%% The definition of the Omicron operator
+%%%%
+
+Omicron( f : [nat -> nonneg_real ]) : setof [[nat -> nonneg_real]] = 
+       { g : [nat -> nonneg_real] | EXISTS ( c2 : nonneg_real, n0 : nat ) :
+       	   FORALL (n : nat |  n >= n0 ) : 
+	   	   g(n) <= c2 * f(n)}
+
+%%%%
+%% The definition of the little omicron operator
+%%%%
+
+LittleOmicron( f : [nat -> nonneg_real ]) : setof [[nat -> nonneg_real]] = 
+       { g : [nat -> nonneg_real] | EXISTS ( n0 : nat ) :
+       	   FORALL ((n : nat |  n >= n0), c2 : nonneg_real ) : 
+	   	   g(n) <= c2 * f(n)}
+
+%%%%
+%% The definition of the Omega operator
+%%%%
+
+Omega( f : [nat -> nonneg_real ]) : setof [[nat -> nonneg_real]] = 
+       { g : [nat -> nonneg_real] | EXISTS ( c1 : nonneg_real, n0 : nat ) :
+       	   FORALL (n : nat |  n >= n0 ) : 
+	   	    c1 * f(n) <= g(n)}
+
+%%%%
+%% The definition of the little omega operator
+%%%%
+
+LittleOmega( f : [nat -> nonneg_real ]) : setof [[nat -> nonneg_real]] = 
+       { g : [nat -> nonneg_real] | EXISTS ( n0 : nat ) :
+       	   FORALL ((n : nat |  n >= n0 ), c1 : nonneg_real) : 
+	   	    c1 * f(n) <= g(n)}
+
+
+
+
+
+END complexity
