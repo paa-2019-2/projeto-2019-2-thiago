@@ -19,6 +19,9 @@ bubbling_cbubbling_equiv: LEMMA
   FORALL (n:nat) (l:list[nat]):
   bubbling(l) = cbubbling(l,n)`1
 
+cbubbling_length: LEMMA
+  FORALL (l:list[nat]): length(cbubbling(l)`1) = length(l)
+
 cbubblesort_aux(lc:[list[nat],nat], (n : below[l`length ] )) : RECURSIVE [list[nat],nat] =
   IF n = 0 THEN lc
   ELSE cbubblesort_aux(cbubbling(lc,n), n-1)
@@ -32,7 +35,7 @@ cbubble_sort(l: list[nat]) : [list[nat],nat] =
 
 cbubble_sort_equiv: LEMMA
   FORALL (l:list[nat]):
-    bubble_sort(l) = cbubble_sort(l)`1
+  bubble_sort(l) = cbubble_sort(l)`1
 
 cbubble_sort_length: LEMMA
   FORALL (l:list[nat]): length(cbubble_sort(l)`1) = length(l)
@@ -48,4 +51,4 @@ bubble_sort_is_quadratic: LEMMA
   FORALL (l:list[nat]):
   member(LAMBDA(n:nat | n = length(l)): cbubble_sort(l)`2, Omicron(LAMBDA(n:nat| n = length(l)):n^2 ))
 
-END ISort
+END BSort
