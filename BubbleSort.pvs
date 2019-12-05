@@ -4,27 +4,24 @@ BEGIN
 IMPORTING complexity
 IMPORTING bubblesort
 
-cbubbling(lc:[list[nat],nat], (n : below[ lc`length])) : RECURSIVE  [list[nat],nat] =
-  CASES lc`1 OF
-    cons(h,tl):
-      IF n = 0 THEN lc
-      ELSIF h > car(tl)
-      THEN LET lcaux = cbubbling((cons(h,cdr(tl)), lc`2), n-1) IN
-      (cons(car(tl), lcaux`1),lcaux`2 + 1)
-      ELSE LET lcaux = cbubbling((tl, lc`2), n-1) IN
-      (cons(h, lcaux`1),lcaux`2 + 1)
-      ENDIF
-  ENDCASES
+cbubbling(lc:[list[nat],nat], (n : below[ lc`1`length])) : RECURSIVE  [list[nat],nat] =
+    IF n = 0 THEN lc
+    ELSIF car(lc`1) > car(cdr(lc`1))
+    THEN LET lcaux = cbubbling((cons(car(lc`1),cdr(cdr(lc`1))), lc`2), n-1) IN
+    (cons(car(cdr(lc`1)), lcaux`1),lcaux`2 + 1)
+    ELSE LET lcaux = cbubbling((cdr(lc`1), lc`2), n-1) IN
+    (cons(car(lc`1), lcaux`1),lcaux`2 + 1)
+    ENDIF
   MEASURE n
 
 bubbling_cbubbling_equiv: LEMMA
-  FORALL (n:nat) (l:list[nat]):
-  bubbling(l) = cbubbling(l,n)`1
+  FORALL (n:nat) (lc:[list[nat],nat]):
+  bubbling(lc`1,n) = cbubbling(lc,n)`1
 
 cbubbling_length: LEMMA
-  FORALL (l:list[nat]): length(cbubbling(l)`1) = length(l)
+  FORALL (n:nat) (lc:[list[nat],nat]): length(cbubbling(lc, n)`1) = length(lc`1)
 
-cbubblesort_aux(lc:[list[nat],nat], (n : below[l`length ] )) : RECURSIVE [list[nat],nat] =
+cbubblesort_aux(lc:[list[nat],nat], (n : below[lc`1`length] )) : RECURSIVE [list[nat],nat] =
   IF n = 0 THEN lc
   ELSE cbubblesort_aux(cbubbling(lc,n), n-1)
   ENDIF
@@ -37,7 +34,7 @@ cbubble_sort(l: list[nat]) : [list[nat],nat] =
 
 cbubble_sort_equiv: LEMMA
   FORALL (l:list[nat]):
-  bubble_sort(l) = cbubble_sort(l)`1
+  bubblesort(l) = cbubble_sort(l)`1
 
 cbubble_sort_length: LEMMA
   FORALL (l:list[nat]): length(cbubble_sort(l)`1) = length(l)
