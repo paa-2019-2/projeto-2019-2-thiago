@@ -51,6 +51,6 @@ pol2_is_quadratic: LEMMA
 
 bubble_sort_is_quadratic: LEMMA
   FORALL (l:list[nat]):
-  member(LAMBDA(n:nat | n = length(l)): cbubble_sort(l)`2, Omicron(LAMBDA(n:nat| n = length(l)):n^2 ))
+  member(LAMBDA(n:nat): cbubble_sort(l)`2, Omicron(LAMBDA(n:nat):length(l)^2 ))
 
 END BSort
