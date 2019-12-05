@@ -13,6 +13,8 @@ cbubbling(lc:[list[nat],nat], (n : below[ lc`length])) : RECURSIVE  [list[nat],n
       (cons(car(tl), lcaux`1),lcaux`2 + 1)
       ELSE LET lcaux = cbubbling((tl, lc`2), n-1) IN
       (cons(h, lcaux`1),lcaux`2 + 1)
+      ENDIF
+  ENDCASES
   MEASURE n
 
 bubbling_cbubbling_equiv: LEMMA
