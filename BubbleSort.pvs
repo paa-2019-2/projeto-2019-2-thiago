@@ -4,8 +4,8 @@ BEGIN
 IMPORTING complexity
 IMPORTING bubblesort
 
-cbubbling(lc:[list[nat],nat], (n : below[ lc`1`length])) : RECURSIVE  [list[nat],nat] =
-    IF n = 0 THEN lc
+cbubbling(lc:[list[nat],nat], (n:nat | n < length(lc`1))) : RECURSIVE  [list[nat],nat] =
+    IF n < 1 THEN lc
     ELSIF car(lc`1) > car(cdr(lc`1))
     THEN LET lcaux = cbubbling((cons(car(lc`1),cdr(cdr(lc`1))), lc`2), n-1) IN
     (cons(car(cdr(lc`1)), lcaux`1),lcaux`2 + 1)
@@ -14,33 +14,39 @@ cbubbling(lc:[list[nat],nat], (n : below[ lc`1`length])) : RECURSIVE  [list[nat]
     ENDIF
   MEASURE n
 
+count_cbubbling: LEMMA
+  FORALL (n:nat) (lc:[list[nat],nat]): cbubbling(lc,n)`2 = lc`2 + n
+
 bubbling_cbubbling_equiv: LEMMA
-  FORALL (n:nat) (lc:[list[nat],nat]):
-  bubbling(lc`1,n) = cbubbling(lc,n)`1
+  FORALL (n:nat)(c:nat) (l:list[nat]):
+  bubbling(l,n) = cbubbling((l,c),n)`1
 
 cbubbling_length: LEMMA
-  FORALL (n:nat) (lc:[list[nat],nat]): length(cbubbling(lc, n)`1) = length(lc`1)
+  FORALL (c:nat)(l:list[nat])(n:nat): length(cbubbling((l,c), n)`1) = length(l)
 
-cbubblesort_aux(lc:[list[nat],nat], (n : below[lc`1`length] )) : RECURSIVE [list[nat],nat] =
-  IF n = 0 THEN lc
+cbubblesort_aux(lc:[list[nat],nat], (n:nat | n < length(lc`1))) : RECURSIVE [list[nat],nat] =
+  IF n < 1 THEN lc
   ELSE cbubblesort_aux(cbubbling(lc,n), n-1)
   ENDIF
   MEASURE n
 
-cbubble_sort(l: list[nat]) : [list[nat],nat] =
+cbubblesort(l: list[nat]) : [list[nat],nat] =
   IF null?(l) THEN (l, 0)
   ELSE cbubblesort_aux((l,0), l`length - 1)
   ENDIF
 
-cbubble_sort_equiv: LEMMA
+cbubblesort_aux_length: LEMMA
+  FORALL (l:list[nat])(n:nat): length(cbubblesort_aux((l,0), n)`1) = length(l)
+
+cbubblesort_equiv: LEMMA
   FORALL (l:list[nat]):
-  bubblesort(l) = cbubble_sort(l)`1
+  bubblesort(l) = cbubblesort(l)`1
 
-cbubble_sort_length: LEMMA
-  FORALL (l:list[nat]): length(cbubble_sort(l)`1) = length(l)
+cbubblesort_length: LEMMA
+  FORALL (l:list[nat]): length(cbubblesort(l)`1) = length(l)
 
-count_cbubble_sort_ws_general: LEMMA
-  FORALL (l:list[nat]): cbubble_sort(l)`2 <= (length(l) * (length(l) - 1))/2
+count_cbubblesort_ws_general: LEMMA
+  FORALL (l:list[nat]): cbubblesort(l)`2 <= (length(l) * (length(l) - 1))/2
 
 pol2_is_quadratic: LEMMA
   member(LAMBDA(n:nat): n*(n-1)/2, Omicron(LAMBDA(n:nat):n^2))
@@ -48,6 +54,6 @@ pol2_is_quadratic: LEMMA
 
 bubble_sort_is_quadratic: LEMMA
   FORALL (l:list[nat]):
-  member(LAMBDA(n:nat): cbubble_sort(l)`2, Omicron(LAMBDA(n:nat):length(l)^2 ))
+  member(LAMBDA(n:nat| n = length(l)): cbubblesort(l)`2, Omicron(LAMBDA(n:nat| n = length(l)):length(l)^2 ))
 
 END BSort
